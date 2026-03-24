@@ -210,17 +210,6 @@ const migrations: Migration[] = [
     },
   },
   {
-    version: 3,
-    up: (db) => {
-      db.exec(
-        [
-          "CREATE INDEX IF NOT EXISTS idx_alerts_repo_state ON alerts(repo, state);",
-          "CREATE INDEX IF NOT EXISTS idx_history_repo_alert ON alert_history(repo, alert_number, state);",
-        ].join("\n")
-      );
-    },
-  },
-  {
     version: 2,
     up: (db) => {
       const columns = [
@@ -248,6 +237,17 @@ const migrations: Migration[] = [
           "  patched_version = json_extract(raw_json, '$.security_vulnerability.first_patched_version.identifier')",
           "WHERE ghsa_id IS NULL AND raw_json IS NOT NULL",
         ].join(" ")
+      );
+    },
+  },
+  {
+    version: 3,
+    up: (db) => {
+      db.exec(
+        [
+          "CREATE INDEX IF NOT EXISTS idx_alerts_repo_state ON alerts(repo, state);",
+          "CREATE INDEX IF NOT EXISTS idx_history_repo_alert ON alert_history(repo, alert_number, state);",
+        ].join("\n")
       );
     },
   },
